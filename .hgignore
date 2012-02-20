@@ -1,0 +1,4 @@
+syntax: glob
+
+# Don't include python bytecode
+*.pyc
