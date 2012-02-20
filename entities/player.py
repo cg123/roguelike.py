@@ -17,7 +17,7 @@ class Player(Entity):
 	def can_walk(self, x, y):
 		if self.room:
 			if self.room.contains(x, y):
-				return True
+				return self.room.entity_at(x,y) is None
 			elif (self.x, self.y) in self.room.openings:
 				return self.world.can_walk(x, y)
 		return False

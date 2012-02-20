@@ -18,6 +18,7 @@ class Room(Entity):
 		self.pos = [x, y]
 		self.size = [w, h]
 		self.openings = set()
+		self.entities = set()
 	
 	def add_opening(self, x, y):
 		self.openings.add((x, y))
@@ -70,3 +71,14 @@ class Room(Entity):
 		return ((x >= self.x and x < self.x + self.size[0] and
 				 y >= self.y and y < self.y + self.size[1]) or 
 			    (x, y) in self.openings)
+	def entity_at(self, x, y):
+		'''
+			Find the entity at the given location.
+
+			Return None if there is no such entity.
+		'''
+		for ent in self.entities:
+			if ent.pos == (x, y):
+				return ent
+		return None
+

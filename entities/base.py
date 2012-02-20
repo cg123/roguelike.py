@@ -56,7 +56,11 @@ class Entity(object):
 			self._pos[0] = max(min(value[0], self.world.dims[0]-1), 1)
 			self._pos[1] = max(min(value[1], self.world.dims[1]-1), 1)
 			if (not self.room) or (not self.room.contains(*value)):
+				if self.room and self in self.room.entities:
+					self.room.entities.remove(self)
 				self.room = self.world.which_room(*value)
+				if self.room:
+					self.room.entities.add(self)
 		return locals()
 	pos = property(**pos())
 

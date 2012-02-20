@@ -61,7 +61,8 @@ class World(object):
 		'''
 			Determine if a location is walkable by the player.
 		'''
-		return self.which_room(x, y) is not None
+		r = self.which_room(x, y)
+		return r is not None and r.entity_at(x, y) is None
 	
 	def which_room(self, x, y):
 		'''
