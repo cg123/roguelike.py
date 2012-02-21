@@ -3,6 +3,7 @@
 
 from entities import *
 import curses
+import time
 
 class World(object):
 	'''
@@ -42,7 +43,6 @@ class World(object):
 			newPos[0] += 1
 		if self.player.can_walk(*newPos):
 			self.player.pos = newPos
-			#self.player.room = self.which_room(*newPos)
 
 	def do_keyboard(self):
 		'''
@@ -50,12 +50,25 @@ class World(object):
 		'''
 		c = self.stdscr.getch()
 		if c < 0:
-			return
+			return False
 		
 		# Right now the only thing the keyboard does is make the player
 		# walk around.
 		if c in map(ord, 'wasd'):
 			self.do_walk(c)
+			return True
+		return False
+	
+	def do_turn(self):
+		#self.draw()
+		while not self.do_keyboard():
+			self._draw()
+			time.sleep(1/60.0)
+		
+		ply, world = self.player, self.world
+		world.addch(ply.y, ply.x, ' ', 0)
+
+		self.draw()
 
 	def can_walk(self, x, y):
 		'''
@@ -78,6 +91,21 @@ class World(object):
 	def draw(self):
 		'''
 			Draw the game world to the screen.
+		'''
+		# Draw the world to the pad
+		# Rooms first, because they go behind stuff.
+		for room in self.rooms:
+			room.draw(self.world)
+		for ent in self.entities:
+			ent.draw(self.world)
+		
+		# Draw to the screen
+		self._draw()
+
+	def _draw(self):
+		'''
+			Draw the section of the pad centered around the player to the
+			viewing area.
 		'''
 		# Find how much real estate we have
 		screen_h, screen_w = self.stdscr.getmaxyx()
@@ -108,23 +136,3 @@ class World(object):
 
 		# Draw the world to the terminal
 		self.world.refresh(game_y, game_x, y, x, y+win_h, x+win_w)
-
-	def update(self):
-		'''
-			Update and draw the world.
-		'''
-		ply, world = self.player, self.world
-		world.addch(ply.y, ply.x, ' ', 0)
-
-		# Update things
-		self.do_keyboard()
-
-		# Draw the world to the pad
-		# Rooms first, because they go behind stuff.
-		for room in self.rooms:
-			room.draw(self.world)
-		for ent in self.entities:
-			ent.draw(self.world)
-		
-		# Draw to the screen
-		self.draw()

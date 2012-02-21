@@ -27,8 +27,9 @@ def game(stdscr):
 	room2.add_opening(room1.x + room1.w, room1.y + room1.h - 1)
 	world.rooms = [room1, room2]
 	world.player.room = room1
+	world.draw()
 	while True:
-		world.update()
+		world.do_turn()
 		time.sleep(1/60.0)
 
 def main():
