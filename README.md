@@ -11,7 +11,7 @@ moment, it's an L-shaped room that you can move an asterisk around.
 
 License
 --------------------
-Copyright (c) 2012, Charles O. Goddard  
+Copyright (c) 2012, Charles O. Goddard
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
